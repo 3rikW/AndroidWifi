@@ -12,6 +12,8 @@ import com.oth.wifi.scan.WifiScanListener
 
 object WifiHelper {
 
+    val LIBRARY_VERSION = BuildConfig.VERSION_NAME
+
     fun getWifiManager(context: Context): WifiManager {
         return context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
     }

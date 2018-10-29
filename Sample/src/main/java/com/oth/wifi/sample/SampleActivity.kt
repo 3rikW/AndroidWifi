@@ -43,6 +43,8 @@ class SampleActivity : AppCompatActivity() {
         /////////////////////////////////////////////////////////////////
 
         scanSsid.setOnClickListener {
+            scanSsidText.text = "---"
+
             val listener = object : SsidAvailableListener {
                 override fun onResult(available: Boolean) {
                     scanSsidText.text = "available: $available"
