@@ -82,17 +82,24 @@ internal object WifiConnectHelper {
     }
 
 
-    fun connect(context: Context, ssid: String, password: String) {
+    fun connect(context: Context, ssid: String, password: String?) {
         val conf = WifiConfiguration()
+
         conf.SSID = String.format("\"%s\"", ssid)
-        conf.preSharedKey = String.format("\"%s\"", password)
         conf.status = WifiConfiguration.Status.ENABLED
-        conf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP)
-        conf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP)
-        conf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK)
-        conf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP)
-        conf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP)
-        conf.allowedProtocols.set(WifiConfiguration.Protocol.RSN)
+        if(password.isNullOrBlank()){
+            conf.hiddenSSID = true
+            conf.priority = 0xBADBAD
+            conf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE)
+        } else {
+            conf.preSharedKey = String.format("\"%s\"", password)
+            conf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP)
+            conf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP)
+            conf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK)
+            conf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP)
+            conf.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP)
+            conf.allowedProtocols.set(WifiConfiguration.Protocol.RSN)
+        }
 
         val wifiManager = WifiHelper.getWifiManager(context)
         val netId = wifiManager.addNetwork(conf)
