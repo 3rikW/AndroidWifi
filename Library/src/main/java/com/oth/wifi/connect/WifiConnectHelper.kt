@@ -34,7 +34,7 @@ internal object WifiConnectHelper {
 
             val info: NetworkInfo? = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO)
             if (info != null && info.isConnected) {
-                val ssid = info.extraInfo.removeQuotes()
+                val ssid = WifiHelper.getCurrentNetworkInfo(context)?.ssid?.removeQuotes()//info.extraInfo.removeQuotes()
                 log(" ssid: $ssid, expectedSsid: $expectedSsid, wifConnectListener: $wifConnectListener")
 
                 // unregister receiver
