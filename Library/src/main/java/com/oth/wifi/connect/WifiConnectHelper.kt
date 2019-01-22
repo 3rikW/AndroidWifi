@@ -8,6 +8,7 @@ import android.net.NetworkInfo
 import android.net.wifi.WifiConfiguration
 import android.net.wifi.WifiManager
 import android.os.Handler
+import android.text.TextUtils
 import com.oth.wifi.WifiCredentials
 import com.oth.wifi.WifiHelper
 import com.oth.wifi.misc.Utils
@@ -83,11 +84,12 @@ internal object WifiConnectHelper {
 
 
     fun connect(context: Context, ssid: String, password: String?) {
+
         val conf = WifiConfiguration()
 
         conf.SSID = String.format("\"%s\"", ssid)
         conf.status = WifiConfiguration.Status.ENABLED
-        if(password.isNullOrBlank()){
+        if (password.isNullOrBlank()) {
             conf.hiddenSSID = true
             conf.priority = 0xBADBAD
             conf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE)
@@ -102,11 +104,35 @@ internal object WifiConnectHelper {
         }
 
         val wifiManager = WifiHelper.getWifiManager(context)
-        val netId = wifiManager.addNetwork(conf)
+        var netId = wifiManager.addNetwork(conf)
+
+        if (netId == -1) {
+            netId = getExistingNetworkId(context, ssid)
+        }
+
+
         wifiManager.enableNetwork(netId, true)
         wifiManager.saveConfiguration()
         wifiManager.reconnect()
         wifiManager.reassociate()
     }
+
+
+    private fun getExistingNetworkId(context: Context, SSID: String): Int {
+        val configuredNetworks = WifiHelper.getWifiManager(context).configuredNetworks
+        if (configuredNetworks != null) {
+            for (existingConfig in configuredNetworks) {
+                if (trimQuotes(existingConfig.SSID) == trimQuotes(SSID)) {
+                    return existingConfig.networkId
+                }
+            }
+        }
+        return -1
+    }
+
+    private fun trimQuotes(message: String): String {
+        return if (TextUtils.isEmpty(message)) "" else message.replace("\"", "")
+    }
+
 
 }
