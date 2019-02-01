@@ -1,7 +1,9 @@
 package com.oth.wifi.misc
 
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
 import android.content.IntentFilter
 
 object Utils {
@@ -21,4 +23,7 @@ object Utils {
 
     }
 
+    fun startActivityIntent(activity: Activity, intent: Intent) {
+        activity.startActivity(intent)
+    }
 }

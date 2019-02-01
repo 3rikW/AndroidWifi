@@ -136,9 +136,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="timeout (ms)"
-            android:text="10000"
             android:inputType="number"
-            android:lines="1" />
+            android:lines="1"
+            android:text="10000" />
 
         <TextView
             android:id="@+id/connectSsidText"
@@ -146,5 +146,18 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="---" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/forceWifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Force WIFI" />
+
     </LinearLayout>
 </LinearLayout>

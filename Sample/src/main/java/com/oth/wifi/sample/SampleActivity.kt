@@ -74,5 +74,11 @@ class SampleActivity : AppCompatActivity() {
 
             WifiHelper.connectToWifi(this@SampleActivity, listener, WifiCredentials(connectSsidSsid.text.toString(), connectSsidPass.text.toString()), connectSsidTimeout.text.toString().toLong())
         }
+
+        /////////////////////////////////////////////////////////////////
+
+        connectSsid.setOnClickListener {
+            WifiHelper.forceWifiUsage(this@SampleActivity, true)
+        }
     }
 }
