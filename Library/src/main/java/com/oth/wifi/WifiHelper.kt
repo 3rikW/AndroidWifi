@@ -10,11 +10,11 @@ import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import com.oth.wifi.connect.WifiConnectHelper
 import com.oth.wifi.connect.WifiConnectListener
 import com.oth.wifi.fetch.UrlOverNetworkListener
 import com.oth.wifi.misc.Utils
-import com.oth.wifi.misc.log
 import com.oth.wifi.scan.SsidAvailableListener
 import com.oth.wifi.scan.WifiScanHelper
 import com.oth.wifi.scan.WifiScanListener
@@ -27,6 +27,8 @@ import java.net.URL
 object WifiHelper {
 
     val LIBRARY_VERSION = BuildConfig.VERSION_NAME
+
+    var network: Network? = null
 
     fun getWifiManager(context: Context): WifiManager {
         return context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -85,10 +87,10 @@ object WifiHelper {
     //////////////////////////////////////////////////////////////////////////////////////////////////
 
     fun fetchAsync(context: Activity, url: String, timeout: Int, urlOverWifiListener: UrlOverNetworkListener) {
-        log("fetchAsync")
+        Log.e("aaaaaaaaa", "fetchAsync")
 
         if (getCurrentNetworkInfo(context)?.ssid == null) {
-            urlOverWifiListener.onNotConnectedToWifi()
+            context.runOnUiThread { urlOverWifiListener.onNotConnectedToWifi() }
             return
         }
 
@@ -97,61 +99,77 @@ object WifiHelper {
         req.addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
 
         try {
-            cm.requestNetwork(req.build(), object : ConnectivityManager.NetworkCallback() {
+            Log.e("aaaaaaaaa", "fetchAsync: networknetworknetworknetworknetwork: $network")
 
-                override fun onAvailable(network: Network) {
+            if (network == null) {
+                Log.e("aaaaaaaaa", "fetchAsync: networknetworknetworknetworknetwork creating new network")
 
-                    Thread(Runnable {
-                        var result: String?
+                cm.requestNetwork(req.build(), object : ConnectivityManager.NetworkCallback() {
 
-                        // 0 = all good
-                        // 1 = timeout
-                        // 2 = exception
-                        var errorType = 0
+                    override fun onAvailable(network: Network) {
 
-                        log("onAvailable")
+                        this@WifiHelper.network = network
 
-                        val url = URL(url)
-                        val urlConnection = network.openConnection(url) as HttpURLConnection
-                        urlConnection.connectTimeout = timeout
-                        urlConnection.readTimeout = timeout
+                        requestWithNetwork(context, url, timeout, urlOverWifiListener, network)
+                    }
+                })
+            } else {
+                Log.e("aaaaaaaaa", "fetchAsync: networknetworknetworknetworknetwork using same network")
 
-                        //
-                        try {
-                            val ins = BufferedInputStream(urlConnection.inputStream)
-                            result = Utils.readStream(ins)
-
-                            log(result)
-                        } catch (e: Exception) {
-                            log("Exception")
-
-                            e.printStackTrace()
-
-                            errorType = if (e is SocketTimeoutException) {
-                                1
-                            } else {
-                                2
-                            }
-                            result = e.toString()
-
-                        } finally {
-                            urlConnection.disconnect()
-                        }
-
-
-                        log("result: $result")
-
-                        when (errorType) {
-                            1 -> urlOverWifiListener.onTimeout()
-                            2 -> urlOverWifiListener.onError(result)
-                            else -> urlOverWifiListener.onResponse(result!!)
-                        }
-                    }).start()
-                }
-            })
+                requestWithNetwork(context, url, timeout, urlOverWifiListener, this@WifiHelper.network!!)
+            }
         } catch (e: SecurityException) {
-            urlOverWifiListener.onError(e.message)
+            context.runOnUiThread { urlOverWifiListener.onError(e.message) }
         }
+    }
+
+    private fun requestWithNetwork(context: Activity, url: String, timeout: Int, urlOverWifiListener: UrlOverNetworkListener, network: Network) {
+        Thread(Runnable {
+            var result: String?
+
+            // 0 = all good
+            // 1 = timeout
+            // 2 = exception
+            var errorType = 0
+
+            Log.e("aaaaaaaaa", "onAvailable")
+
+            val url = URL(url)
+            val urlConnection = network.openConnection(url) as HttpURLConnection
+            urlConnection.connectTimeout = timeout
+            urlConnection.readTimeout = timeout
+
+            //
+            try {
+                val ins = BufferedInputStream(urlConnection.inputStream)
+                result = Utils.readStream(ins)
+
+                Log.e("aaaaaaaaa", result)
+            } catch (e: Exception) {
+                Log.e("aaaaaaaaa", "Exception")
+
+                e.printStackTrace()
+
+                errorType = if (e is SocketTimeoutException) {
+                    1
+                } else {
+                    2
+                }
+                result = e.toString()
+
+            } finally {
+                urlConnection.disconnect()
+            }
+
+
+            Log.e("aaaaaaaaa", "result: $result")
+
+            when (errorType) {
+                1 -> context.runOnUiThread { urlOverWifiListener.onTimeout() }
+                2 -> context.runOnUiThread { urlOverWifiListener.onError(result) }
+                else -> context.runOnUiThread { urlOverWifiListener.onResponse(result!!) }
+            }
+        }).start()
     }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
