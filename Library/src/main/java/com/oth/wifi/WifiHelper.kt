@@ -88,7 +88,7 @@ object WifiHelper {
         log("fetchAsync")
 
         if (getCurrentNetworkInfo(context)?.ssid == null) {
-            context.runOnUiThread { urlOverWifiListener.onNotConnectedToWifi() }
+            urlOverWifiListener.onNotConnectedToWifi()
             return
         }
 
@@ -142,15 +142,15 @@ object WifiHelper {
                         log("result: $result")
 
                         when (errorType) {
-                            1 -> context.runOnUiThread { urlOverWifiListener.onTimeout() }
-                            2 -> context.runOnUiThread { urlOverWifiListener.onError(result) }
-                            else -> context.runOnUiThread { urlOverWifiListener.onResponse(result!!) }
+                            1 -> urlOverWifiListener.onTimeout()
+                            2 -> urlOverWifiListener.onError(result)
+                            else -> urlOverWifiListener.onResponse(result!!)
                         }
                     }).start()
                 }
             })
         } catch (e: SecurityException) {
-            context.runOnUiThread { urlOverWifiListener.onError(e.message) }
+            urlOverWifiListener.onError(e.message)
         }
     }
 //////////////////////////////////////////////////////////////////////////////////////////////////
