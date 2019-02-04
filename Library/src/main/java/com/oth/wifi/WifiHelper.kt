@@ -3,14 +3,13 @@ package com.oth.wifi
 import android.app.Activity
 import android.content.Context
 import android.content.Context.CONNECTIVITY_SERVICE
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkCapabilities
-import android.net.NetworkRequest
+import android.content.Intent
+import android.net.*
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Build
+import android.provider.Settings
 import com.oth.wifi.connect.WifiConnectHelper
 import com.oth.wifi.connect.WifiConnectListener
 import com.oth.wifi.fetch.UrlOverNetworkListener
@@ -86,7 +85,7 @@ object WifiHelper {
     //////////////////////////////////////////////////////////////////////////////////////////////////
 
     fun fetchAsync(context: Activity, url: String, timeout: Int, urlOverWifiListener: UrlOverNetworkListener) {
-        log( "fetchAsync")
+        log("fetchAsync")
 
         if (getCurrentNetworkInfo(context)?.ssid == null) {
             context.runOnUiThread { urlOverWifiListener.onNotConnectedToWifi() }
@@ -158,20 +157,69 @@ object WifiHelper {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
     fun forceWifiUsage(context: Context) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-//            manager.bindProcessToNetwork(null)
-//        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            ConnectivityManager.setProcessDefaultNetwork(null)
-//        }
 
-        // Add any NetworkCapabilities.NET_CAPABILITY_...
-        val capabilities = intArrayOf(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        var canWriteFlag = false
 
-// Add any NetworkCapabilities.TRANSPORT_...
-        val transportTypes = intArrayOf(NetworkCapabilities.TRANSPORT_WIFI)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-        alwaysPreferNetworksWith(context, capabilities, transportTypes)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                canWriteFlag = Settings.System.canWrite(context)
+
+                if (!canWriteFlag) {
+                    val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
+                    intent.setData(Uri.parse("package:" + context.packageName))
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+                    Utils.startActivityIntent(context, intent)
+                }
+            }
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && canWriteFlag || Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                val manager = context
+                        .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val builder: NetworkRequest.Builder
+                builder = NetworkRequest.Builder()
+                //set the transport type do WIFI
+                builder.addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+
+
+                manager.requestNetwork(builder.build(), object : ConnectivityManager.NetworkCallback() {
+                    override fun onAvailable(network: Network) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            manager.bindProcessToNetwork(network)
+                        } else {
+                            //This method was deprecated in API level 23
+                            ConnectivityManager.setProcessDefaultNetwork(network)
+                        }
+                        try {
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+
+                        manager.unregisterNetworkCallback(this)
+                    }
+                })
+            }
+
+
+        }
+
+
+////        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+////            val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+////            manager.bindProcessToNetwork(null)
+////        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+////            ConnectivityManager.setProcessDefaultNetwork(null)
+////        }
+//
+//        // Add any NetworkCapabilities.NET_CAPABILITY_...
+//        val capabilities = intArrayOf(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+//
+//// Add any NetworkCapabilities.TRANSPORT_...
+//        val transportTypes = intArrayOf(NetworkCapabilities.TRANSPORT_WIFI)
+//
+//        alwaysPreferNetworksWith(context, capabilities, transportTypes)
 
     }
 
