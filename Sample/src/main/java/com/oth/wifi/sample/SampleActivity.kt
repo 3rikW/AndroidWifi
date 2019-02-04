@@ -3,10 +3,12 @@ package com.oth.wifi.sample
 import android.net.wifi.ScanResult
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.oth.wifi.WifiCredentials
 import com.oth.wifi.WifiHelper
 import com.oth.wifi.WifiState
 import com.oth.wifi.connect.WifiConnectListener
+import com.oth.wifi.fetch.UrlOverNetworkListener
 import com.oth.wifi.scan.SsidAvailableListener
 import com.oth.wifi.scan.WifiScanListener
 import kotlinx.android.synthetic.main.activity_sample.*
@@ -77,8 +79,36 @@ class SampleActivity : AppCompatActivity() {
 
         /////////////////////////////////////////////////////////////////
 
-        connectSsid.setOnClickListener {
-            WifiHelper.forceWifiUsage(this@SampleActivity, true)
+        forceWifi.setOnClickListener {
+            WifiHelper.forceWifiUsage(this@SampleActivity)
+        }
+
+        /////////////////////////////////////////////////////////////////
+
+        fetchWifi.setOnClickListener {
+            fetchWifiText.text = "---"
+
+            WifiHelper.fetchAsync(this@SampleActivity, "http://google.com", 5000, object : UrlOverNetworkListener {
+                override fun onNotConnectedToWifi() {
+                    Log.e("MainActivity", "onNotConnectedToWifi")
+                    fetchWifiText.text = "onNotConnectedToWifi"
+                }
+
+                override fun onResponse(result: String) {
+                    Log.e("MainActivity", "result: $result")
+                    fetchWifiText.text = "OK"
+                }
+
+                override fun onTimeout() {
+                    Log.e("MainActivity", "onTimeout")
+                    fetchWifiText.text = "onTimeout"
+                }
+
+                override fun onError(e: String?) {
+                    Log.e("MainActivity", "e: $e")
+                    fetchWifiText.text = "Exception / ERROR: $e"
+                }
+            })
         }
     }
 }

@@ -158,6 +158,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Force WIFI" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/fetchWifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fetch" />
+
+        <TextView
+            android:id="@+id/fetchWifiText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="---" />
     </LinearLayout>
 </LinearLayout>
