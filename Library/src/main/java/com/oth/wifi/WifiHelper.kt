@@ -13,6 +13,7 @@ import android.provider.Settings
 import android.util.Log
 import com.oth.wifi.connect.WifiConnectHelper
 import com.oth.wifi.connect.WifiConnectListener
+import com.oth.wifi.fetch.TransportType
 import com.oth.wifi.fetch.UrlOverNetworkListener
 import com.oth.wifi.misc.Utils
 import com.oth.wifi.scan.SsidAvailableListener
@@ -95,17 +96,23 @@ object WifiHelper {
     //////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun fetchAsync(context: Activity, url: String, timeout: Int, urlOverWifiListener: UrlOverNetworkListener) {
+    fun fetchAsync(activity: Activity, url: String, timeout: Int, transportType: TransportType, urlOverWifiListener: UrlOverNetworkListener) {
         Log.e("aaaaaaaaa", "fetchAsync")
 
-        if (getCurrentNetworkInfo(context)?.ssid == null) {
-            context.runOnUiThread { urlOverWifiListener.onNotConnectedToWifi() }
+        val cm = activity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
+        val isConnected: Boolean = activeNetwork?.isConnectedOrConnecting == true
+        val rightConnectionType: Boolean = activeNetwork?.type == transportType.connectivity
+
+        Log.e("aaaaaaaaa", "fetchAsync: isConnected: $isConnected, rightConnectionType: $rightConnectionType")
+
+        if (!isConnected || !rightConnectionType) {
+            activity.runOnUiThread { urlOverWifiListener.onNotConnectedToNetwork() }
             return
         }
 
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val req = NetworkRequest.Builder()
-        req.addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+        req.addTransportType(transportType.type)
 
         try {
             Log.e("aaaaaaaaa", "fetchAsync: networknetworknetworknetworknetwork: $network")
@@ -116,19 +123,20 @@ object WifiHelper {
                 cm.requestNetwork(req.build(), object : ConnectivityManager.NetworkCallback() {
 
                     override fun onAvailable(network: Network) {
+                        Log.e("aaaaaaaaa", "fetchAsync: onAvailable")
 
                         this@WifiHelper.network = network
 
-                        requestWithNetwork(context, url, timeout, urlOverWifiListener, network)
+                        requestWithNetwork(activity, url, timeout, urlOverWifiListener, network)
                     }
                 })
             } else {
                 Log.e("aaaaaaaaa", "fetchAsync: networknetworknetworknetworknetwork using same network")
 
-                requestWithNetwork(context, url, timeout, urlOverWifiListener, this@WifiHelper.network!!)
+                requestWithNetwork(activity, url, timeout, urlOverWifiListener, this@WifiHelper.network!!)
             }
         } catch (e: SecurityException) {
-            context.runOnUiThread { urlOverWifiListener.onError(e.message) }
+            activity.runOnUiThread { urlOverWifiListener.onError(e.message) }
         }
     }
 

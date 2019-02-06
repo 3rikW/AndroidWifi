@@ -8,6 +8,7 @@ import com.oth.wifi.WifiCredentials
 import com.oth.wifi.WifiHelper
 import com.oth.wifi.WifiState
 import com.oth.wifi.connect.WifiConnectListener
+import com.oth.wifi.fetch.TransportType
 import com.oth.wifi.fetch.UrlOverNetworkListener
 import com.oth.wifi.scan.SsidAvailableListener
 import com.oth.wifi.scan.WifiScanListener
@@ -94,8 +95,8 @@ class SampleActivity : AppCompatActivity() {
         fetchWifi.setOnClickListener {
             fetchWifiText.text = "---"
 
-            WifiHelper.fetchAsync(this@SampleActivity, "http://google.com", 5000, object : UrlOverNetworkListener {
-                override fun onNotConnectedToWifi() {
+            WifiHelper.fetchAsync(this@SampleActivity, "http://google.com", 5000, TransportType.TRANSPORT_WIFI, object : UrlOverNetworkListener {
+                override fun onNotConnectedToNetwork() {
                     Log.e("MainActivity", "onNotConnectedToWifi")
                     fetchWifiText.text = "onNotConnectedToWifi"
                 }
@@ -113,6 +114,32 @@ class SampleActivity : AppCompatActivity() {
                 override fun onError(e: String?) {
                     Log.e("MainActivity", "e: $e")
                     fetchWifiText.text = "Exception / ERROR: $e"
+                }
+            })
+        }
+
+        fetchMobileData.setOnClickListener {
+            fetchMobileDataText.text = "---"
+
+            WifiHelper.fetchAsync(this@SampleActivity, "http://google.com", 5000, TransportType.TRANSPORT_CELLULAR, object : UrlOverNetworkListener {
+                override fun onNotConnectedToNetwork() {
+                    Log.e("MainActivity", "onNotConnectedToMobileData")
+                    fetchMobileDataText.text = "onNotConnectedToMobileData"
+                }
+
+                override fun onResponse(result: String) {
+                    Log.e("MainActivity", "result: $result")
+                    fetchMobileDataText.text = "OK"
+                }
+
+                override fun onTimeout() {
+                    Log.e("MainActivity", "onTimeout")
+                    fetchMobileDataText.text = "onTimeout"
+                }
+
+                override fun onError(e: String?) {
+                    Log.e("MainActivity", "e: $e")
+                    fetchMobileDataText.text = "Exception / ERROR: $e"
                 }
             })
         }

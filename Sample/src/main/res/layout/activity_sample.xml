@@ -6,197 +6,228 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <Button
-            android:id="@+id/wifiState"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="wifi state" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/wifiStateText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="---" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+                <Button
+                    android:id="@+id/wifiState"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="wifi state" />
 
-        <Button
-            android:id="@+id/toggleWifi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="toggle wifi" />
+                <TextView
+                    android:id="@+id/wifiStateText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="---" />
+            </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+                <Button
+                    android:id="@+id/toggleWifi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="toggle wifi" />
 
-        <Button
-            android:id="@+id/scan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Scan" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/scanText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="---" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+                <Button
+                    android:id="@+id/scan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Scan" />
 
-        <Button
-            android:id="@+id/scanSsid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Scan for" />
+                <TextView
+                    android:id="@+id/scanText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="---" />
+            </LinearLayout>
 
-        <EditText
-            android:id="@+id/scanSsidEdit"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="Colorfy" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/scanSsidText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="---" />
-    </LinearLayout>
+                <Button
+                    android:id="@+id/scanSsid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Scan for" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/scanSsidEdit"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:text="Colorfy" />
 
-        <Button
-            android:id="@+id/current"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Current" />
+                <TextView
+                    android:id="@+id/scanSsidText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="---" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/currentText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="---" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+                <Button
+                    android:id="@+id/current"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Current" />
 
-        <Button
-            android:id="@+id/connectSsid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Connect" />
+                <TextView
+                    android:id="@+id/currentText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="---" />
+            </LinearLayout>
 
-        <EditText
-            android:id="@+id/connectSsidSsid"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:lines="2"
-            android:text="colorfy" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/connectSsidPass"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:lines="2"
-            android:text="pr0nt0f3e!" />
-    </LinearLayout>
+                <Button
+                    android:id="@+id/connectSsid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Connect" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/connectSsidSsid"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:lines="2"
+                    android:text="colorfy" />
 
-        <EditText
-            android:id="@+id/connectSsidTimeout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="timeout (ms)"
-            android:inputType="number"
-            android:lines="1"
-            android:text="10000" />
+                <EditText
+                    android:id="@+id/connectSsidPass"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:lines="2"
+                    android:text="pr0nt0f3e!" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/connectSsidText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="---" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/connectSsidTimeout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="timeout (ms)"
+                    android:inputType="number"
+                    android:lines="1"
+                    android:text="10000" />
 
-        <Button
-            android:id="@+id/forgetSsid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Forget" />
+                <TextView
+                    android:id="@+id/connectSsidText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="---" />
+            </LinearLayout>
 
-        <EditText
-            android:id="@+id/forgetSsidSsid"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:lines="2"
-            android:text="colorfy" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-    </LinearLayout>
+                <Button
+                    android:id="@+id/forgetSsid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Forget" />
+
+                <EditText
+                    android:id="@+id/forgetSsidSsid"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:lines="2"
+                    android:text="colorfy" />
+
+            </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/forceWifi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Force WIFI" />
-    </LinearLayout>
+                <Button
+                    android:id="@+id/forceWifi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Force WIFI" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/fetchWifi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fetch" />
+                <Button
+                    android:id="@+id/fetchWifi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fetch Wifi" />
 
-        <TextView
-            android:id="@+id/fetchWifiText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="---" />
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/fetchWifiText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="---" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/fetchMobileData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fetch Mobile Data" />
+
+                <TextView
+                    android:id="@+id/fetchMobileDataText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="---" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    >>>>>>> Stashed changes
 </LinearLayout>
