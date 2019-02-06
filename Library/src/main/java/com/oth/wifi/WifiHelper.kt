@@ -30,6 +30,7 @@ object WifiHelper {
     val LIBRARY_VERSION = BuildConfig.VERSION_NAME
 
     var network: Network? = null
+    var transportType: TransportType? = null
 
     fun getWifiManager(context: Context): WifiManager {
         return context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -117,7 +118,7 @@ object WifiHelper {
         try {
             Log.e("aaaaaaaaa", "fetchAsync: networknetworknetworknetworknetwork: $network")
 
-            if (network == null) {
+            if (network == null || this@WifiHelper.transportType != transportType) {
                 Log.e("aaaaaaaaa", "fetchAsync: networknetworknetworknetworknetwork creating new network")
 
                 cm.requestNetwork(req.build(), object : ConnectivityManager.NetworkCallback() {
@@ -126,6 +127,7 @@ object WifiHelper {
                         Log.e("aaaaaaaaa", "fetchAsync: onAvailable")
 
                         this@WifiHelper.network = network
+                        this@WifiHelper.transportType = transportType
 
                         requestWithNetwork(activity, url, timeout, urlOverWifiListener, network)
                     }
