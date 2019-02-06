@@ -79,6 +79,12 @@ class SampleActivity : AppCompatActivity() {
 
         /////////////////////////////////////////////////////////////////
 
+        forgetSsid.setOnClickListener {
+            WifiHelper.forgetWifi(this@SampleActivity, forgetSsidSsid.text.toString())
+        }
+
+        /////////////////////////////////////////////////////////////////
+
         forceWifi.setOnClickListener {
             WifiHelper.forceWifiUsage(this@SampleActivity)
         }

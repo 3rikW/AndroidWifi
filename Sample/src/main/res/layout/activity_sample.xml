@@ -154,6 +154,28 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/forgetSsid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forget" />
+
+        <EditText
+            android:id="@+id/forgetSsidSsid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:lines="2"
+            android:text="colorfy" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
             android:id="@+id/forceWifi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

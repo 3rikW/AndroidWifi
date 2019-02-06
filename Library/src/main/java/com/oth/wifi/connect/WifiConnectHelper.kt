@@ -118,7 +118,7 @@ internal object WifiConnectHelper {
     }
 
 
-    private fun getExistingNetworkId(context: Context, SSID: String): Int {
+    fun getExistingNetworkId(context: Context, SSID: String): Int {
         val configuredNetworks = WifiHelper.getWifiManager(context).configuredNetworks
         if (configuredNetworks != null) {
             for (existingConfig in configuredNetworks) {
