@@ -23,6 +23,7 @@ import java.io.BufferedInputStream
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.URL
+import java.util.*
 
 
 object WifiHelper {
@@ -30,6 +31,8 @@ object WifiHelper {
     val LIBRARY_VERSION = BuildConfig.VERSION_NAME
 
     var network: Network? = null
+    var networkInstanceCount = 0
+    var networkInstanceStartTime = 0L
     var transportType: TransportType? = null
 
     fun getWifiManager(context: Context): WifiManager {
@@ -121,17 +124,27 @@ object WifiHelper {
             if (network == null || this@WifiHelper.transportType != transportType) {
                 Log.e("aaaaaaaaa", "fetchAsync: networknetworknetworknetworknetwork creating new network")
 
-                cm.requestNetwork(req.build(), object : ConnectivityManager.NetworkCallback() {
+                try {
+                    cm.requestNetwork(req.build(), object : ConnectivityManager.NetworkCallback() {
 
-                    override fun onAvailable(network: Network) {
-                        Log.e("aaaaaaaaa", "fetchAsync: onAvailable")
+                        override fun onAvailable(network: Network) {
+                            Log.e("aaaaaaaaa", "fetchAsync: onAvailable")
 
-                        this@WifiHelper.network = network
-                        this@WifiHelper.transportType = transportType
+                            this@WifiHelper.network = network
+                            this@WifiHelper.networkInstanceCount++
+                            this@WifiHelper.transportType = transportType
+                            if (this@WifiHelper.networkInstanceStartTime == 0L) {
+                                this@WifiHelper.networkInstanceStartTime = Date().time
+                            }
 
-                        requestWithNetwork(activity, url, timeout, urlOverWifiListener, network)
-                    }
-                })
+                            requestWithNetwork(activity, url, timeout, urlOverWifiListener, network)
+                        }
+                    })
+                } catch (e: IllegalArgumentException) {
+                    throw IllegalArgumentException(e.message + ", instance count: ${this@WifiHelper.networkInstanceCount}, " +
+                            "time of first instance: ${this@WifiHelper.networkInstanceStartTime}, time of crash: ${Date().time}")
+                }
+
             } else {
                 Log.e("aaaaaaaaa", "fetchAsync: networknetworknetworknetworknetwork using same network")
 

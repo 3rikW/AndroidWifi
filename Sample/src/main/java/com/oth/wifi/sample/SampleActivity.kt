@@ -92,30 +92,34 @@ class SampleActivity : AppCompatActivity() {
 
         /////////////////////////////////////////////////////////////////
 
+        val listener = object : UrlOverNetworkListener {
+            override fun onNotConnectedToNetwork() {
+                Log.e("MainActivity", "onNotConnectedToWifi")
+                fetchWifiText.text = "onNotConnectedToWifi"
+            }
+
+            override fun onResponse(result: String) {
+                Log.e("MainActivity", "result: $result")
+                fetchWifiText.text = "OK"
+            }
+
+            override fun onTimeout() {
+                Log.e("MainActivity", "onTimeout")
+                fetchWifiText.text = "onTimeout"
+            }
+
+            override fun onError(e: String?) {
+                Log.e("MainActivity", "e: $e")
+                fetchWifiText.text = "Exception / ERROR: $e"
+            }
+        }
+
         fetchWifi.setOnClickListener {
             fetchWifiText.text = "---"
 
-            WifiHelper.fetchAsync(this@SampleActivity, "http://google.com", 5000, TransportType.TRANSPORT_WIFI, object : UrlOverNetworkListener {
-                override fun onNotConnectedToNetwork() {
-                    Log.e("MainActivity", "onNotConnectedToWifi")
-                    fetchWifiText.text = "onNotConnectedToWifi"
-                }
-
-                override fun onResponse(result: String) {
-                    Log.e("MainActivity", "result: $result")
-                    fetchWifiText.text = "OK"
-                }
-
-                override fun onTimeout() {
-                    Log.e("MainActivity", "onTimeout")
-                    fetchWifiText.text = "onTimeout"
-                }
-
-                override fun onError(e: String?) {
-                    Log.e("MainActivity", "e: $e")
-                    fetchWifiText.text = "Exception / ERROR: $e"
-                }
-            })
+            for (i in 0..50) {
+                WifiHelper.fetchAsync(this@SampleActivity, "http://google.com", 5000, TransportType.TRANSPORT_WIFI, listener)
+            }
         }
 
         fetchMobileData.setOnClickListener {
