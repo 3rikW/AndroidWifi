@@ -104,7 +104,15 @@ internal object WifiConnectHelper {
         }
 
         val wifiManager = WifiHelper.getWifiManager(context)
-        var netId = wifiManager.addNetwork(conf)
+
+
+        var netId = -1
+
+        try {
+            wifiManager.addNetwork(conf)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
         if (netId == -1) {
             netId = getExistingNetworkId(context, ssid)
