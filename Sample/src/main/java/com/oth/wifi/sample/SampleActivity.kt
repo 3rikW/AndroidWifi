@@ -112,6 +112,11 @@ class SampleActivity : AppCompatActivity() {
                 Log.e("MainActivity", "e: $e")
                 fetchWifiText.text = "Exception / ERROR: $e"
             }
+
+            override fun onContextError() {
+                Log.e("MainActivity", "Context error")
+                fetchWifiText.text = "Context error"
+            }
         }
 
         fetchWifi.setOnClickListener {
@@ -144,6 +149,11 @@ class SampleActivity : AppCompatActivity() {
                 override fun onError(e: String?) {
                     Log.e("MainActivity", "e: $e")
                     fetchMobileDataText.text = "Exception / ERROR: $e"
+                }
+
+                override fun onContextError() {
+                    Log.e("MainActivity", "Context error")
+                    fetchWifiText.text = "Context error"
                 }
             })
         }

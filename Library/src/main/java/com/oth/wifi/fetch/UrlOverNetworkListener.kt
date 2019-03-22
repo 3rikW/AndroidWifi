@@ -5,4 +5,5 @@ interface UrlOverNetworkListener {
     fun onTimeout()
     fun onNotConnectedToNetwork()
     fun onError(e: String?)
+    fun onContextError()
 }

@@ -100,8 +100,13 @@ object WifiHelper {
     //////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun fetchAsync(activity: Activity, url: String, timeout: Int, transportType: TransportType, urlOverWifiListener: UrlOverNetworkListener) {
+    fun fetchAsync(activity: Activity?, url: String, timeout: Int, transportType: TransportType, urlOverWifiListener: UrlOverNetworkListener) {
         Log.e("aaaaaaaaa", "fetchAsync")
+
+        if (activity == null) {
+            urlOverWifiListener.onContextError()
+            return
+        }
 
         val cm = activity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
