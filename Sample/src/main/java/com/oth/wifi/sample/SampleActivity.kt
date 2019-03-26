@@ -122,7 +122,7 @@ class SampleActivity : AppCompatActivity() {
         fetchWifi.setOnClickListener {
             fetchWifiText.text = "---"
 
-            for (i in 0..50) {
+            for (i in 0..100) {
                 WifiHelper.fetchAsync(this@SampleActivity, "http://google.com", 5000, TransportType.TRANSPORT_WIFI, listener)
             }
         }

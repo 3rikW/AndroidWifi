@@ -201,7 +201,7 @@
                     android:id="@+id/fetchWifi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Fetch Wifi" />
+                    android:text="Fetch Wifi (100)" />
 
                 <TextView
                     android:id="@+id/fetchWifiText"
