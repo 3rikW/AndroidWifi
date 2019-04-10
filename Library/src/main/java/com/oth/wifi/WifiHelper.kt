@@ -114,10 +114,14 @@ object WifiHelper {
 
         Log.e("aaaaaaaaa", "fetchAsync: isConnected: $isConnected, rightConnectionType: $rightConnectionType")
 
+        /*
+        we should not return here. If the user has LTE it will still fail since the activeNetwork will be 
+        the Cellular one and it will not match wifi even though the phone is connected to both.
+        
         if (!isConnected || !rightConnectionType) {
             activity.runOnUiThread { urlOverWifiListener.onNotConnectedToNetwork() }
             return
-        }
+        }*/
 
         val req = NetworkRequest.Builder()
         req.addTransportType(transportType.type)
